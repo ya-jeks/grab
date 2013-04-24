@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+require 'benchmark'
+require 'grab'
+
+begin
+  if ARGV.size != 2
+    puts 'Usage example: grab \'https://www.google.ru/search?q=beer&tbm=isch\' /beer_images_folder'
+    exit
+  end
+
+  url, folder = ARGV
+  page = Grab::Page.new url
+  resources = Grab::Collection.new page.images
+
+  puts "Available images: #{resources.available.count}\n"
+  puts "Downloading... "
+
+  time = Benchmark.realtime do
+    Grab::CollectionDownloader.download! resources, folder
+  end
+
+  puts "Finished!\n"
+  puts "Downloaded images: #{resources.completed.count}\n"
+  puts "Failed: #{resources.broken.count}\n"
+  puts "Elapsed time: #{time} seconds"
+
+rescue => e
+  puts e.message
+  puts e.backtrace.join("\n")
+  exit
+end
