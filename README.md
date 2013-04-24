@@ -1,6 +1,6 @@
 # Grab
 
-Files grabber
+Images grabber
 
 ## Installation
 
