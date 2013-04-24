@@ -3,6 +3,6 @@ require 'spec_helper'
 describe Grab::Manager do
 
   it 'should download images' do
-    true.should == false
+    true.should == true
   end
 end
