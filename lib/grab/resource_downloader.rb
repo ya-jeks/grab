@@ -1,17 +1,15 @@
+require 'celluloid'
+
 module Grab
   class ResourceDownloader
+    include Celluloid
     attr_reader :resource
-
-    def self.download!(res, folder)
-      rd = self.new res
-      rd.download folder
-    end
 
     def initialize(res)
       @resource = res
     end
 
-    def download(folder)
+    def download_to(folder)
       resource.state = 'downloading'
 
       write_file :src => open(resource.url),

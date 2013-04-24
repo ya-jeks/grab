@@ -2,7 +2,6 @@
 
 require 'rubygems'
 require 'bundler/setup'
-require 'benchmark'
 require 'grab'
 
 begin
@@ -12,20 +11,14 @@ begin
   end
 
   url, folder = ARGV
+  FileUtils.mkdir folder unless File.directory? folder
+
   page = Grab::Page.new url
-  resources = Grab::Collection.new page.images
+  manager = Grab::Manager.new :url => url,
+                              :folder => folder,
+                              :links => page.images
 
-  puts "Available images: #{resources.available.count}\n"
-  puts "Downloading... "
-
-  time = Benchmark.realtime do
-    Grab::CollectionDownloader.download! resources, folder
-  end
-
-  puts "Finished!\n"
-  puts "Downloaded images: #{resources.completed.count}\n"
-  puts "Failed: #{resources.broken.count}\n"
-  puts "Elapsed time: #{time} seconds"
+  manager.start_download!
 
 rescue => e
   puts e.message

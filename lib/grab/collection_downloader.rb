@@ -1,30 +1,17 @@
-require 'open-uri'
-
 module Grab
   class CollectionDownloader
     attr_accessor :collection
-
-    def self.download!(coll, folder)
-      cd = self.new coll
-      cd.download folder
-    end
 
     def initialize(list)
       @collection = list
     end
 
-    def download(folder)
-      prepare_dir folder
+    def download_to(folder)
       collection.available.each do |res|
-        t = Thread.new{ Grab::ResourceDownloader.download! res, folder }
-        t.join
+        rd = Grab::ResourceDownloader.new res
+        rd.async.download_to folder
       end
     end
-
-    protected
-      def prepare_dir(folder)
-        FileUtils.mkdir folder unless File.directory? folder
-      end
 
   end
 end

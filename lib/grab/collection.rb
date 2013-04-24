@@ -1,6 +1,6 @@
 module Grab
   class Collection
-    attr_accessor :resources
+    attr_reader :resources
 
     def initialize(urls)
       @resources = urls.map{|url| Grab::Resource.new url }
