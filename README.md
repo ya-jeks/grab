@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/ya-jeks/grab.png?branch=master)](http://travis-ci.org/ya-jeks/grab)
+
 # Grab
 
 Images grabber
