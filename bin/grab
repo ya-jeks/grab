@@ -11,11 +11,8 @@ begin
   end
 
   url, folder = ARGV
-  FileUtils.mkdir folder unless File.directory? folder
-
   page = Grab::Page.new url
-  manager = Grab::Manager.new :url => url,
-                              :folder => folder,
+  manager = Grab::Manager.new :folder => folder,
                               :links => page.images
 
   manager.start_download!

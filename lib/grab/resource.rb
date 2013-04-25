@@ -24,7 +24,8 @@ module Grab
     end
 
     def filename
-      File.basename url
+      fname = File.basename url
+      fname.split('?')[0]
     end
 
   end

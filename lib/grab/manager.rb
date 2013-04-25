@@ -2,15 +2,17 @@ require 'benchmark'
 
 module Grab
   class Manager
-    attr_reader :url, :folder, :links, :collection
+    attr_reader :folder, :links, :collection
     # TODO May be state_machine?
 
     def initialize(opts)
-      @url, @folder, @links = opts[:url], opts[:folder], opts[:links]
+      @folder, @links = opts[:folder], opts[:links]
       @collection = Grab::Collection.new links
     end
 
     def start_download!
+      prepare_folder! folder
+
       puts "Available images: #{collection.available.count}\n"
 
       time = Benchmark.realtime do
@@ -18,7 +20,7 @@ module Grab
         downloader.download_to folder
       end
 
-      wait_for_finish!
+      wait_for_finish
 
       puts "Failed: #{collection.broken.count}\n"
       puts "Downloaded: #{collection.completed.count}\n"
@@ -26,7 +28,11 @@ module Grab
     end
 
     protected
-      def wait_for_finish!
+      def prepare_folder!(folder)
+        FileUtils.mkdir folder unless File.directory? folder
+      end
+
+      def wait_for_finish
         loop { break if finished? }
       end
 
